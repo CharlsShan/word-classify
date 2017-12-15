@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.weka.mapper.KeyWordMapper" >
+  <resultMap id="BaseResultMap" type="com.weka.entity.KeyWord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="classify_id" property="classifyId" jdbcType="INTEGER" />
+    <result column="keyword_name" property="keywordName" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from key_word
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.weka.entity.KeyWord" >
+    insert into key_word (id, classify_id, keyword_name
+      )
+    values (#{id,jdbcType=INTEGER}, #{classifyId,jdbcType=INTEGER}, #{keywordName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.weka.entity.KeyWord" >
+    update key_word
+    set classify_id = #{classifyId,jdbcType=INTEGER},
+      keyword_name = #{keywordName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, classify_id, keyword_name
+    from key_word
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByClassifyId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, classify_id, keyword_name
+    from key_word
+    where classify_id = #{classifyId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, classify_id, keyword_name
+    from key_word
+  </select>
+</mapper>

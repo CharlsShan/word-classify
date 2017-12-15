@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<Properties>
+		<Property name="logPath">E:/classify_log</Property>
+	</Properties>
+     <appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- 过滤器   让控制台只输出debug的日志 -->
+			<ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+			<!-- 控制台输出格式 -->
+			<PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-6p%c:%L - %X{siteName} - %X{sessionId} - %m%n" />
+		</Console>
+		
+		<!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动转储为日期+序号后缀的log文件-->
+        <RollingFile name="LogicFile" fileName="${logPath}/logic.log"
+                     filePattern="${logPath}/logic-%d{yyyy-MM-dd}-%i.log">
+            <!--只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS}] [%t] %highlight{%-5level} %c{1.}:%M:%L - %m%n%highlight{%throwable}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- 最多备份30天以内的日志，此处为策略限制，Delete中可以按自己需要用正则表达式编写 -->  
+            <DefaultRolloverStrategy> 
+                <Delete basePath="${logPath}/ipproxy" maxDepth="5"> 
+                    <IfFileName glob="logic-*.log" /> 
+                    <IfLastModified age="30d" /> 
+                </Delete> 
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+	</appenders>
+
+	<loggers>
+        <Root level="info" includeLocation="true">
+           <appender-ref ref="Console"/>
+           <appender-ref ref="LogicFile"/>
+        </Root>
+	</loggers>
+</configuration>
